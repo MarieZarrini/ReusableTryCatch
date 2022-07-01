@@ -4,35 +4,22 @@
 	{
 		static void Main(string[] args)
 		{
-			SafeExecutor(AuthenticateUser);
+			AuthenticateUser();
 		}
 
 
-		static readonly Action AuthenticateUser = () =>
+		private static void AuthenticateUser()
 		{
-			var user = new User() { Name = "Marie" };
-			var authenticationService = new AuthenticationService();
-
-			authenticationService.Authenticated += MailService.OnAuthenticated;
-			authenticationService.Authenticated += MessageService.OnAuthenticated;
-
-			authenticationService.Authenticate(user);
-		};
-
-		private static void SafeExecutor(Action action)
-		{
-			try
+			SafeExecutor.TryExecutingAction(() =>
 			{
-				action();
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.ToString());
-			}
-			finally
-			{
-				Console.WriteLine("All Done :)");
-			}
+				var user = new User() { Name = "Marie" };
+				var authenticationService = new AuthenticationService();
+
+				authenticationService.Authenticated += MailService.OnAuthenticated;
+				authenticationService.Authenticated += MessageService.OnAuthenticated;
+
+				authenticationService.Authenticate(user);
+			});
 		}
 	}
 }
